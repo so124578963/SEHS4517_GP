@@ -41,6 +41,37 @@
         home.init();
     }
 
+    // Member 
+    var member = {
+
+        init: function() {
+
+            member.registerForm();
+        },
+
+        registerForm: function() {
+
+            const forms = document.querySelectorAll('.needs-validation');
+
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                form.classList.add('was-validated')
+                    }, false)
+                }
+            )
+        },
+    }
+
+    if($(".register-page").length > 0 || $(".login-page").length > 0) {
+
+        member.init();
+    }
+
     // Common Function
     var common = {
 

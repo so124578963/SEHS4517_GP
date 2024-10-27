@@ -31,7 +31,7 @@
                     <img src="images/logo.png" class="logo" />
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="bi bi-menu-button-wide"></i>
+                    <i class="bi bi-list"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarToggler">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -39,10 +39,10 @@
                             <a class="nav-link active" aria-current="page" href="index.html">Good Show Cinema</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Registration</a>
+                            <a class="nav-link" href="register.html">Registration</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Login</a>
+                            <a class="nav-link" href="login.html">Login</a>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
@@ -64,8 +64,8 @@
                             Explore the latest blockbusters and timeless classics in our luxurious theaters. Great sound, comfortable seats, and a perfect movie experience await you.
                         </div>
                         <div class="left-button-group">
-                            <a class="btn btn-danger" href="#" role="button">Register Now</a>
-                            <a class="btn btn-outline-light" href="#" role="button">Login</a>
+                            <a class="btn btn-danger" href="register.html" role="button">Register Now</a>
+                            <a class="btn btn-outline-light" href="login.html" role="button">Login</a>
                         </div>
                         <div class="left-stat">
                             <div class="row">
@@ -94,15 +94,64 @@
             </div>
         </section>
 
-        <!-- <section class="slider-section">
-            <div class="">
-                <div class="index-slider owl-carousel owl-theme">
-                    <div class="banner-item">
-                        <img src="images/banner1.png" />
+        <section class="movie-section">
+            <div class="container">
+                <h1 class="text-center">
+                    <strong>Ticketing</strong>
+                </h1>
+                <div class="movie-wrapper">
+                    <div class="movie-item row justify-content-center">
+                        <div class="col-md-3 movie-cover-image">
+                            <img src="images/index/venom.jpg" />
+                        </div>
+                        <div class="col-md-3 movie-description">
+                            <h3>
+                                Introduction
+                            </h3>
+                            <p>
+                                This long-awaited origin story of how the most iconic characters in the TRANSFORMERS universe, Orion Pax and D-16, went from brothers-in-arms to become sworn enemies, Optimus Prime and Megatron
+                            </p>
+                            <a class="btn btn-danger" href="#" role="button">Reserve Now</a>
+                        </div>
+                        <div class="col-md-3 movie-intro">
+                            <div class="row justify-content-left">
+                                <div class="col-md-4">
+                                    <p>
+                                        Genre
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    Action
+                                </div>
+                            </div>
+                            <div class="row justify-content-left">
+                                <div class="col-md-4">
+                                    <p>
+                                        Run Time
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    104
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section> -->
+        </section>
+
+        <section class="slider-section">
+            <div class="">
+                <div class="index-slider owl-carousel owl-theme">
+                    <div class="banner-item">
+                        <img src="images/index/banner1.jpg" />
+                    </div>
+                    <div class="banner-item">
+                        <img src="images/index/banner2.jpg" />
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <section class="feature-section">
             <div class="container">
@@ -163,31 +212,41 @@
                     </div>
                 </div>
                 <div class="card-group">
-                    <div class="card">
+                    <div class="card text-bg-danger">
                         <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                            <i class="bi bi-badge-8k-fill"></i>
+                            <p class="card-text"><strong>Immersive Experience</strong></p>
+                            <p class="card-text"><small class="text-body-secondary">Surround sound and stunning visuals for unparalleled movie nights.</small></p>
                           </div>
                     </div>
-                    <div class="card">
+                    <div class="card border-danger">
                         <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                            <i class="bi bi-emoji-smile-fill"></i>
+                            <p class="card-text"><strong>Comfort Seating</strong></p>
+                            <p class="card-text"><small class="text-body-secondary">Relax in our plush, spacious seats designed for ultimate comfort.</small></p>
                           </div>
                     </div>
-                    <div class="card">
+                    <div class="card text-bg-danger">
                         <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                            <i class="bi bi-chat-heart-fill"></i>
+                            <p class="card-text"><strong>New Releases</strong></p>
+                            <p class="card-text"><small class="text-body-secondary">Catch the latest blockbusters right as they hit theaters.</small></p>
                           </div>
                     </div>
-                    <div class="card">
+                    <div class="card border-danger">
                         <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                            <i class="bi bi-bag-heart-fill"></i>
+                            <p class="card-text"><strong>Classic Moments</strong></p>
+                            <p class="card-text"><small class="text-body-secondary">Rediscover cinematic classics that are forever etched in history</small></p>
                           </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="footer-section">
+            <div class="container">
+                <small class="text-body-secondary">Copyright © 2024 Good Show Cinema</small>
             </div>
         </section>
 

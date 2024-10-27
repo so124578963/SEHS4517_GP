@@ -97,7 +97,7 @@
     background-color: #fff;
 }
 
-.feature-section, .experience-section, .discover-section
+.feature-section, .experience-section, .discover-section, .footer-section, .movie-section, .register-section
 {
     background-color: #fff;
     color: #000;
@@ -124,4 +124,50 @@
     padding: 20px;
     margin: 0 auto;
     border-radius: 25px;
+}
+
+.discover-section .bi
+{
+    font-size: 100px;
+}
+
+.discover-section .text-bg-danger
+{
+    background-color: #840e34 !important;
+}
+
+.discover-section .text-bg-danger .text-body-secondary
+{
+    color: #cbcbcb !important;
+}
+
+.discover-section .border-danger
+{
+    background-color: #ffc5c4 !important;
+    border-color: #840e34 !important;
+}
+
+.discover-section .card-body
+{
+    padding-bottom: 50px;
+}
+
+.footer-section
+{
+    border-top: #cbcbcb 1px solid;
+}
+
+.movie-section .movie-wrapper
+{
+    padding-top: 20px;
+}
+
+.movie-section .movie-cover-image img
+{
+    max-width: 300px;
+}
+
+.movie-section .movie-description h3, .movie-section .movie-intro p
+{
+    color: #00668f;
 }
