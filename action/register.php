@@ -1,6 +1,14 @@
 <?php
 
-require_once __DIR__ . '/Member.php';
+require_once '../class/Member.php';
 
-$member = new Member();
+if($_SERVER['REQUEST_METHOD'] === "POST")
+{
+    $member = new Member();
 
+    $data = $_POST;
+
+    $result = $member->register($data);
+
+    echo json_encode($result);
+}

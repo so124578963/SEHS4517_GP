@@ -33,13 +33,33 @@ class Database
      * @param  object $pdo      php pdo db connection
      * @param  string $sql      mysql query
      * @param  array  $bindData list of bind data with values
+     * @return array  $data     assoc array of one row data
+     */
+    public function fetchOne($pdo, $sql, $bindData = array()) {
+
+        $data = array();
+        foreach ($bindData as $key => $value) {
+            $data[$key] = $this->removeXSS($value);
+        }
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($data);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    /**
+     * @param  object $pdo      php pdo db connection
+     * @param  string $sql      mysql query
+     * @param  array  $bindData list of bind data with values
      * @return array  $data     assoc array of all row data
     */
     public function fetchAll($pdo, $sql, $bindData = array()) 
     {
         $data = array();
         foreach ($bindData as $key => $value) {
-        $data[$key] = $this->removeXSS($value);
+            $data[$key] = $this->removeXSS($value);
         }
 
         $stmt = $pdo->prepare($sql);
@@ -59,7 +79,7 @@ class Database
     {
         $data = array();
         foreach ($bindData as $key => $value) {
-            $data[$key] = removeXSS($value);
+            $data[$key] = $this->removeXSS($value);
         }
 
         $stmt = $pdo->prepare($sql);
@@ -67,6 +87,26 @@ class Database
         $lastInsertId = $pdo->lastInsertId();
 
         return $lastInsertId;
+    }
+
+    /**
+     * @param  object $pdo      php pdo db connection
+     * @param  string $sql      mysql query
+     * @param  array  $bindData list of bind data with values
+     * @return int    $rowCount affeced amount of row
+     */
+    public function updateQuery($pdo, $sql, $bindData = array()) {
+
+        $data = array();
+        foreach ($bindData as $key => $value) {
+            $data[$key] = $this->removeXSS($value);
+        }
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($data); 
+        $rowCount = $stmt->rowCount();
+
+        return $rowCount;
     }
 
     /**

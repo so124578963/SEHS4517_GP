@@ -1,5 +1,7 @@
 <?php
 
+require_once 'Database.php';
+
 class Member extends Database
 {
     public function register($data)
@@ -30,8 +32,8 @@ class Member extends Database
                 "first_name" => $data["first_name"],
                 "last_name" => $data["last_name"],
                 "email_address" => $data["email_address"],
-                "password" => $data["password"],
-                "mailing_address" => md5($data["mailing_address"]),
+                "password" => md5($data["password"]),
+                "mailing_address" => $data["mailing_address"],
                 "phone_number" => $data["phone_number"],
             );
 
@@ -39,6 +41,39 @@ class Member extends Database
 
             $result["success"] = true;
             $result["message"] = "Member Register Success.";
+        }
+
+        return $result;
+    }
+
+    public function login($data)
+    {
+        $result = array(
+            "success" => false,
+            "message" => "",
+        );
+
+        // db connect
+        $pdo = parent::getConnection();
+
+        // check email address exist
+        $sql = "SELECT * FROM customer WHERE email_address = :email_address AND password = :password";
+        $dbData = parent::fetchOne($pdo, $sql, array("email_address" => $data["email_address"], "password" => md5($data["password"])));
+
+        if($dbData)
+        {
+            $customer = $dbData;
+
+            // Login Success
+            $sql = "UPDATE `customer` SET last_login_time = NOW() WHERE id = :id;";
+
+            $rowCount = parent::updateQuery($pdo, $sql, array("id" => $customer["id"]));
+            
+            $result["customer"] = $customer;
+        }
+        else
+        {
+            $result["message"] = "Login Fail.";
         }
 
         return $result;
