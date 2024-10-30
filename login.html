@@ -38,17 +38,29 @@
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="index.html">Good Show Cinema</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" id="register-nav">
                             <a class="nav-link" href="register.html">Registration</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" id="login-nav">
                             <a class="nav-link active" href="login.html">Login</a>
+                        </li>
+                        <li class="nav-item" id="customer-nav" style="display: none;">
+                            <a class="nav-link disabled" aria-disabled="true"></a>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-warning" type="submit">Search</button>
                     </form>
+                </div>
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="logout-msg" class="toast text-bg-primary" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto">Message</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body"></div>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -67,14 +79,14 @@
                             <h5>Login Information</h5>
                             <div class="mb-3">
                                 <label for="email_address" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="email_address" placeholder="Email Address" required>
+                                <input type="email" class="form-control" id="email_address" value="a@b.com" placeholder="Email Address" required>
                                 <div class="invalid-feedback">
                                     Please provide a valid Email Address.
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Password" required>
+                                <input type="password" class="form-control" id="password" value="abc" placeholder="Password" required>
                                 <div class="invalid-feedback">
                                     Please provide a valid Password.
                                 </div>
@@ -95,7 +107,12 @@
                                         <strong class="me-auto">Message</strong>
                                         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                     </div>
-                                    <div class="toast-body"></div>
+                                    <div class="toast-body">
+                                        <span class="toast-msg"></span>
+                                        <div class="mt-2 pt-2 border-top index-btn">
+                                            <a href="index.html" class="btn btn-outline-light" tabindex="-1" role="button">Home Page</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>

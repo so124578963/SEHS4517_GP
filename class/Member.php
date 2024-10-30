@@ -40,7 +40,7 @@ class Member extends Database
             $lastInsertId = parent::insertQuery($pdo, $sql, $sqlBindData);
 
             $result["success"] = true;
-            $result["message"] = "Member Register Success.";
+            $result["message"] = "Member Register Success. You can login the account on Login Page.";
         }
 
         return $result;
@@ -65,15 +65,17 @@ class Member extends Database
             $customer = $dbData;
 
             // Login Success
-            $sql = "UPDATE `customer` SET last_login_time = NOW() WHERE id = :id;";
+            $sql = "UPDATE `customer` SET last_login_at = NOW() WHERE id = :id;";
 
             $rowCount = parent::updateQuery($pdo, $sql, array("id" => $customer["id"]));
             
+            $result["success"] = true;
             $result["customer"] = $customer;
+            $result["message"] = "Login Success: Wait for 5 second to go to Reservation page.";
         }
         else
         {
-            $result["message"] = "Login Fail.";
+            $result["message"] = "Login Fail: Account Exist, you can go back to Home Page";
         }
 
         return $result;

@@ -38,6 +38,12 @@
     margin: 0 20px;
 }
 
+.nav-link.disabled, .nav-link:disabled
+{
+    color: #ffff6c;
+    font-weight: bold;
+}
+
 .navbar-nav .nav-link.active, .navbar-nav .nav-link.show, .nav-link:focus, .nav-link:hover, .bi
 {
     color: #fff;
@@ -164,7 +170,7 @@
 
 .movie-section .movie-cover-image img
 {
-    max-width: 300px;
+    max-width: 100%;
 }
 
 .movie-section .movie-description h3, .movie-section .movie-intro p

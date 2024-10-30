@@ -129,7 +129,88 @@
         },
 
         login: function() {
+
+            const formMsg = document.getElementById('form-msg');
+            var formAlert = new bootstrap.Toast(formMsg);
+
+            var data = {
+                email_address : member._loginForm.find("#email_address").val(),
+                password : member._loginForm.find("#password").val(),
+            };
             
+            // use ajax http request
+            $.ajax({
+
+                url: member._loginForm.attr("action"),
+                type: "POST",
+                data: data,
+                dataType: 'json',
+                beforeSend: function(responses) {
+
+                    common.spinnerLoader(true, member._loginForm);
+
+                    member._loginForm.find("#form-msg").find(".index-btn").hide();
+                },
+                success: function(responses) {
+
+                    if(responses.success)
+                    {
+                        member._loginForm.find("#form-msg").find(".toast-body").text(responses.message);
+                        formAlert.show();
+
+                        // count down to refresh
+                        setTimeout(function(){
+                            location.reload(); 
+                    }, 5000); 
+                    }
+                    else
+                    {
+                        member._loginForm.find("#form-msg").find(".toast-msg").text(responses.message);
+                        member._loginForm.find("#form-msg").find(".index-btn").show();
+                        formAlert.show();
+                    }
+                },
+                error: function() {
+
+                    // error handling
+                    member._loginForm.find("#form-msg").find(".toast-body").text("Login Fail: Something wrong.");
+                    formAlert.show();
+                },
+                complete: function() {
+
+                    common.spinnerLoader(false, member._loginForm);
+                }
+            });
+        },
+
+        logout: function() {
+
+            var data = {
+                action: "logout"
+            };
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: 'action/logout.php',
+                data: data,
+                success: function (responses) {
+
+                    if(responses.success)
+                    {
+                        const formMsg = document.getElementById('logout-msg');
+                        var formAlert = new bootstrap.Toast(formMsg);
+
+                        $("#logout-msg").find(".toast-body").text(responses.message);
+                        formAlert.show();
+
+                        // count down to refresh
+                        setTimeout(function(){
+                            location.reload(); 
+                        }, 5000); 
+                    }
+                },
+            });
         },
     }
 
@@ -139,6 +220,54 @@
 
     // Common Function
     var common = {
+
+        checkCustomerSession: function() {
+
+            var data = {
+                action: "session"
+            };
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: 'action/check_customer_session.php',
+                data: data,
+                success: function (responses) {
+
+                    if(responses.id !== "")
+                    {
+                        // have login
+                        var loginHtml = '<a class="nav-link" id="logout-btn" href="#">Logout</a>';
+                        $("#login-nav").html(loginHtml);
+
+                        $("#logout-btn").bind("click", function() {
+                            member.logout();
+                        });
+
+                        var registerHtml = '<a class="nav-link" href="reservation.html">Reservation</a>';
+                        $("#register-nav").html(registerHtml);
+
+                        var customerHtml = '<a class="nav-link disabled" aria-disabled="true">Welcome, '+responses.first_name+" "+responses.last_name+'</a>';
+                        $("#customer-nav").html(customerHtml);
+                        $("#customer-nav").show();
+
+                        // redirect
+                        console.log(location);
+
+                        if(location.pathname.indexOf("login.html") != -1)
+                        {
+                            location.href="reservation.html";
+                        }
+                    }
+                    else
+                    {
+                        // haven't login
+                        $("#customer-nav").html("");
+                        $("#customer-nav").hide();
+                    }
+                },
+            });
+        },
 
         scrollToTop: function() {
 
@@ -167,6 +296,8 @@
     if($(".btn-scroll-to-top").length > 0) {
 
         common.scrollToTop();
+
+        common.checkCustomerSession();
     }
 
 })(jQuery);
