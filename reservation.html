@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Good Show Cinema" />
+        <meta name="keywords" content="Good Show Cinema" />
+        <link href="images/favicon-32x32.png" rel="icon" type="image/png" />
+        <title>Good Show Cinema</title>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+
+        <!-- Slider CSS -->
+        <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <link rel="stylesheet" href="css/owl.theme.default.min.css">
+
+        <!-- Bootstrap Icon CSS -->
+        <link rel="stylesheet" href="css/bootstrap-icons.min.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="css/custom.css">
+    </head>
+    <body class="reservation-page">
+        
+        <!-- Nav Bar -->
+        <nav class="navbar navbar-expand-lg sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <img src="images/logo.png" class="logo" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarToggler">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="index.html">Good Show Cinema</a>
+                        </li>
+                        <li class="nav-item" id="register-nav">
+                            <a class="nav-link" href="register.html">Registration</a>
+                        </li>
+                        <li class="nav-item" id="login-nav">
+                            <a class="nav-link" href="login.html">Login</a>
+                        </li>
+                        <li class="nav-item" id="customer-nav" style="display: none;">
+                            <a class="nav-link disabled" aria-disabled="true"></a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-warning" type="submit">Search</button>
+                    </form>
+                </div>
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="logout-msg" class="toast text-bg-primary" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto">Message</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body"></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <section class="movie-section">
+            <div class="container">
+                <h1 class="text-center">
+                    <strong>Ticketing</strong>
+                </h1>
+                <div class="movie-wrapper owl-carousel owl-theme">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="reservation-section">
+            <div class="container">
+                <div class="reservation-wrapper row justify-content-center">
+                    <div class="col-md-4">
+                        <h1>
+                            <strong>Movie magic awaits</strong>
+                        </h1>
+                        <h3>Lights, Camera, Action! Book your ticket today</h3>
+                    </div>
+                    <div class="col-md-4">
+                        <form class="needs-validation" novalidate id="reservation-form"  onsubmit="return false;" action="action/reservation.php" method="post">
+                            <h5>Movie Information</h5>
+                            <div class="mb-3">
+                                <label for="first_name" class="form-label">Movie </label>
+                                <select class="form-select" class="form-control" id="movie-option" aria-label="Movie" required>
+                                    <option selected disabled value="">Please Choose Movie</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please Choose Movie.
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="spinner-border" role="status" style="display: none;">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+
+                                <button class="btn btn-danger" type="submit">Reserve</button>
+
+                                <button class="btn btn-outline-danger" type="reset">Clear</button>
+                            </div>
+
+                            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                                <div id="form-msg" class="toast text-bg-primary" role="alert" aria-live="assertive" aria-atomic="true">
+                                    <div class="toast-header">
+                                        <strong class="me-auto">Message</strong>
+                                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                    </div>
+                                    <div class="toast-body"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="footer-section">
+            <div class="container">
+                <small class="text-body-secondary">Copyright © 2024 Good Show Cinema</small>
+            </div>
+        </section>
+
+        <!-- Scroll to top button -->
+        <div class="btn-scroll-to-top">
+            <i class="bi bi-arrow-up-circle"></i>
+        </div>
+
+    </body>
+
+    <!-- jQuery -->
+    <script src="js/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <!-- Slider JS -->
+    <script src="js/owl.carousel.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="js/custom.js"></script>
+</html>

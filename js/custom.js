@@ -8,6 +8,109 @@
         init: function() {
 
             home.slider();
+
+            home.getMovieList();
+        },
+
+        getMovieList: function() {
+
+            var data = {
+                action: "movie_list"
+            };
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: 'action/get_movie_list.php',
+                data: data,
+                success: function (responses) {
+
+                    if(responses.success)
+                    {
+                        $(".movie-wrapper").html("");
+
+                        var dbData = responses.message;
+
+                        var movieHtml = "";
+
+                        $.each(dbData, function(index, item) {
+                            
+                            movieHtml += '<div class="movie-item row justify-content-center">';
+                            movieHtml += '<div class="col-md-3 movie-cover-image">';
+                            movieHtml += '<img src="'+item.cover_image_url+'" />';
+                            movieHtml += '</div>';
+                            movieHtml += '<div class="col-md-3 movie-description">';
+                            movieHtml += '<h3>Introduction</h3>';
+                            movieHtml += '<p>'+item.description+'</p>';
+                            movieHtml += '</div>';
+                            movieHtml += '<div class="col-md-6 movie-intro">';
+
+                            movieHtml += '<div class="row justify-content-left">';
+                            movieHtml += '<div class="col-md-4">';
+                            movieHtml += '<p>Name</p>';
+                            movieHtml += '</div>';
+                            movieHtml += '<div class="col-md-4">'+item.name+'</div>';
+                            movieHtml += '</div>';
+
+                            movieHtml += '<div class="row justify-content-left">';
+                            movieHtml += '<div class="col-md-4">';
+                            movieHtml += '<p>Category</p>';
+                            movieHtml += '</div>';
+                            movieHtml += '<div class="col-md-4">'+item.category+'</div>';
+                            movieHtml += '</div>';
+
+                            movieHtml += '<div class="row justify-content-left">';
+                            movieHtml += '<div class="col-md-4">';
+                            movieHtml += '<p>Language</p>';
+                            movieHtml += '</div>';
+                            movieHtml += '<div class="col-md-4">'+item.language+'</div>';
+                            movieHtml += '</div>';
+
+                            movieHtml += '<div class="row justify-content-left">';
+                            movieHtml += '<div class="col-md-4">';
+                            movieHtml += '<p>Publish Date</p>';
+                            movieHtml += '</div>';
+                            movieHtml += '<div class="col-md-4">'+item.publish_date+'</div>';
+                            movieHtml += '</div>';
+
+                            movieHtml += '<div class="row justify-content-left">';
+                            movieHtml += '<div class="col-md-4">';
+                            movieHtml += '<p>Run Time</p>';
+                            movieHtml += '</div>';
+                            movieHtml += '<div class="col-md-4">'+item.run_time+'</div>';
+                            movieHtml += '</div>';
+                            
+                            movieHtml += '</div>';
+                            movieHtml += '</div>';
+
+                        });
+
+                        $(".movie-wrapper").html(movieHtml);
+
+                        $(".movie-wrapper").owlCarousel({
+
+                            loop: true,
+                            margin: 0,
+                            nav: false,
+                            dots: true,
+                            autoplay: true,
+                            autoplayTimeout: 5000,
+                            autoplayHoverPause: true,
+                            responsive:{
+                                0:{
+                                    items: 1
+                                },
+                                600:{
+                                    items: 1
+                                },
+                                1000:{
+                                    items: 1
+                                }
+                            }
+                        })
+                    }
+                },
+            });
         },
 
         slider: function() {
@@ -54,8 +157,6 @@
         },
 
         validation: function() {
-
-            var process = false;
 
             const forms = document.querySelectorAll('.needs-validation');
 
@@ -218,6 +319,88 @@
         member.init();
     }
 
+    // Reservation
+    var reservation = {
+
+        _reservationForm: $("#reservation-form"),
+
+        init: function() {
+
+            home.getMovieList();
+
+            reservation.getTheatreList();
+
+            reservation.validation();
+        },
+        
+        validation: function() {
+
+            const forms = document.querySelectorAll('.needs-validation');
+
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) 
+                    {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    else
+                    {
+                        // register form handler
+                        if(reservation._reservationForm.length > 0) {
+                            // reservation.reserve();
+                        }
+                    }
+
+                form.classList.add('was-validated')
+                    }, false)
+                }
+            )
+        },
+
+        getTheatreList: function() {
+
+            var data = {
+                action: "theatre_list"
+            };
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: 'action/get_theatre_list.php',
+                data: data,
+                success: function (responses) {
+
+                    if(responses.success)
+                    {
+                        var dbData = responses.message;
+
+                        $.each(dbData, function(index, item) {
+                            
+                            $("#movie-option").append($('<option>', { 
+                                value: item.id,
+                                text : item.name 
+                            }));
+                        });
+
+                        $("#movie-option").bind("change", function() {
+                            reservation.reloadTimeSlot();
+                        });
+                    }
+                },
+            });
+        },
+
+        reloadTimeSlot: function() {
+
+        },
+    }
+
+    if($(".reservation-page").length > 0) {
+
+        reservation.init();
+    }
+
     // Common Function
     var common = {
 
@@ -252,8 +435,6 @@
                         $("#customer-nav").show();
 
                         // redirect
-                        console.log(location);
-
                         if(location.pathname.indexOf("login.html") != -1)
                         {
                             location.href="reservation.html";
@@ -264,6 +445,21 @@
                         // haven't login
                         $("#customer-nav").html("");
                         $("#customer-nav").hide();
+
+                        // redirect
+                        if(location.pathname.indexOf("reservation.html") != -1)
+                        {
+                            const formMsg = document.getElementById('logout-msg');
+                            var formAlert = new bootstrap.Toast(formMsg);
+
+                            $("#logout-msg").find(".toast-body").text("Please Login First. After 5 second will redirect to Login page.");
+                            formAlert.show();
+
+                            // count down to refresh
+                            setTimeout(function(){
+                                location.href="login.html";
+                            }, 5000); 
+                        }
                     }
                 },
             });
