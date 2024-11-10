@@ -22,6 +22,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST")
                 $data[$row["id"]] = array(
                     "id" => $row["id"],
                     "name" => $row["name"],
+                    "price" => $row["price"],
                 );
             }
 

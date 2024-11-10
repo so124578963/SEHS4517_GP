@@ -11,7 +11,10 @@ class Database
 
     public function __construct()
     {
-        
+        if(!$this->_connection)
+        {
+            $this->_connection = $this->_connectDb(self::DB_HOST, self::DB_DBNAME, self::DB_USERNAME, self::DB_PASSWORD);
+        }
     }
 
     protected function _connectDb($host, $db, $username, $password)
@@ -21,11 +24,6 @@ class Database
 
     public function getConnection()
     {
-        if(!$this->_connection)
-        {
-            $this->_connection = $this->_connectDb(self::DB_HOST, self::DB_DBNAME, self::DB_USERNAME, self::DB_PASSWORD);
-        }
-
         return $this->_connection;
     }
 

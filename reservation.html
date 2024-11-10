@@ -81,6 +81,11 @@
         <section class="reservation-section">
             <div class="container">
                 <div class="reservation-wrapper row justify-content-center">
+
+                    <div class="col-12 alert alert-success" role="alert">
+                        <button class="btn btn-outline-success" onclick="location.href='index.html'">Cancel</button>
+                    </div>
+
                     <div class="col-md-4">
                         <h1>
                             <strong>Movie magic awaits</strong>
@@ -91,7 +96,7 @@
                         <form class="needs-validation" novalidate id="reservation-form"  onsubmit="return false;" action="action/reservation.php" method="post">
                             <h5>Movie Information</h5>
                             <div class="mb-3">
-                                <label for="first_name" class="form-label">Movie </label>
+                                <label for="movie-option" class="form-label">Movie </label>
                                 <select class="form-select" class="form-control" id="movie-option" aria-label="Movie" required>
                                     <option selected disabled value="">Please Choose Movie</option>
                                 </select>
@@ -99,7 +104,31 @@
                                     Please Choose Movie.
                                 </div>
                             </div>
+                            <div class="mb-3">
+                                <label for="movie-timeslot" class="form-label">Time Slot </label>
+                                <select class="form-select" class="form-control" id="movie-timeslot" name="movie_theatre_id" aria-label="Time Slot" required disabled>
+                                    <option selected disabled value="">Please Choose Time Slot</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please Choose Time Slot.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="movie-seat" class="form-label">Seat (Can Multiple Select)</label>
+                                <select class="form-select" multiple class="form-control" id="movie-seat" name="seat_id[]" aria-label="Seat" required disabled>
+                                    <option selected disabled value="">Please Choose Seat</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please Choose Seat.
+                                </div>
+                            </div>
                             <div class="col-12">
+
+                                <!-- Hidden Value -->
+                                <input type="hidden" name="price" />
+                                <input type="hidden" name="customer_id" />
+                                <input type="hidden" name="customer_email_address" />
+
                                 <div class="spinner-border" role="status" style="display: none;">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>

@@ -79,6 +79,13 @@
                             movieHtml += '</div>';
                             movieHtml += '<div class="col-md-4">'+item.run_time+'</div>';
                             movieHtml += '</div>';
+
+                            movieHtml += '<div class="row justify-content-left">';
+                            movieHtml += '<div class="col-md-4">';
+                            movieHtml += '<p>Price</p>';
+                            movieHtml += '</div>';
+                            movieHtml += '<div class="col-md-4">$'+item.price+'</div>';
+                            movieHtml += '</div>';
                             
                             movieHtml += '</div>';
                             movieHtml += '</div>';
@@ -328,7 +335,7 @@
 
             home.getMovieList();
 
-            reservation.getTheatreList();
+            reservation.getMovieList();
 
             reservation.validation();
         },
@@ -348,7 +355,9 @@
                     {
                         // register form handler
                         if(reservation._reservationForm.length > 0) {
-                            // reservation.reserve();
+                            reservation.reserve();
+
+                            console.log("here");
                         }
                     }
 
@@ -358,7 +367,7 @@
             )
         },
 
-        getTheatreList: function() {
+        getMovieList: function() {
 
             var data = {
                 action: "theatre_list"
@@ -379,21 +388,138 @@
                             
                             $("#movie-option").append($('<option>', { 
                                 value: item.id,
-                                text : item.name 
+                                text : item.name,
+                                data_price : item.price,
                             }));
                         });
 
-                        $("#movie-option").bind("change", function() {
-                            reservation.reloadTimeSlot();
+                        $("#movie-option").on("change", function() {
+                            reservation.reloadTimeSlot(this.value, dbData);
+
+                            //apply price to hidden value
+                            $("input[name=price]").val($(this).find(':selected').attr('data_price'));
                         });
                     }
                 },
             });
         },
 
-        reloadTimeSlot: function() {
+        reloadTimeSlot: function(value, data) {
 
+            $.each(data, function(index, item) {
+
+                if(value == item.id)
+                {
+                    $("#movie-timeslot").html("");
+
+                    $("#movie-timeslot").append('<option selected disabled value="">Please Choose Time Slot</option>');
+
+                    $("#movie-seat").html("");
+
+                    $("#movie-seat").append('<option selected disabled value="">Please Choose Seat</option>');
+
+                    $.each(item.timeslot, function(index, time) {
+
+                        const date = new Date(time.start_time);
+                            
+                        $("#movie-timeslot").append($('<option>', { 
+                            value: time.movie_theatre_id,
+                            text : date.toDateString()+" "+date.toLocaleTimeString().replace(/(.*)\D\d+/, '$1')+" ("+time.theatre_name+")" 
+                        }));
+                    });
+
+                    $("#movie-timeslot").prop('disabled', false);
+
+                    $("#movie-timeslot").on("change", function() {
+                        reservation.reloadSeatPlan(this.value);
+                    });
+                }
+            });
         },
+
+        reloadSeatPlan: function(value) {
+
+            $("#movie-seat").html("");
+
+            $("#movie-seat").append('<option selected disabled value="">Please Choose Seat</option>');
+            
+            var data = {
+                action: "seat_list",
+                movie_theatre_id: value,
+            };
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: 'action/get_seat_list.php',
+                data: data,
+                success: function (responses) {
+
+                    if(responses.success)
+                    {
+                        var dbData = responses.message;
+
+                        $.each(dbData, function(index, item) {
+
+                            var disabled = false;
+                            if(item.reservation_item_id)
+                            {
+                                disabled = true;
+                            }
+
+                            $("#movie-seat").append($('<option>', { 
+                                value: item.seat_id,
+                                text : item.line+item.column,
+                                disabled : disabled,
+                            }));
+                        });
+
+                        $("#movie-seat").prop('disabled', false);
+                    }
+                },
+            });
+        },
+
+        reserve: function() {
+
+            const formMsg = document.getElementById('form-msg');
+            var formAlert = new bootstrap.Toast(formMsg);
+
+            var data = {
+                movie_theatre_id : reservation._reservationForm.find("#movie-timeslot").find(":selected").val(),
+                seat_id : reservation._reservationForm.find("#movie-seat").val(),
+                customer_id : reservation._reservationForm.find("input[name=customer_id]").val(),
+                price : reservation._reservationForm.find("input[name=price]").val(),
+            };
+
+            // use ajax http request
+            $.ajax({
+
+                url: reservation._reservationForm.attr("action"),
+                type: "POST",
+                data: data,
+                dataType: 'json',
+                beforeSend: function(responses) {
+
+                    common.spinnerLoader(true, reservation._reservationForm);
+                },
+                success: function(responses) {
+
+                    reservation._reservationForm.find("#form-msg").find(".toast-body").text(responses.message);
+                    formAlert.show();
+                },
+                error: function() {
+
+                    // error handling
+                    reservation._reservationForm.find("#form-msg").find(".toast-body").text("Reserve Fail: Something wrong.");
+                    formAlert.show();
+                },
+                complete: function() {
+
+                    common.spinnerLoader(false, reservation._reservationForm);
+                }
+            });
+        }
     }
 
     if($(".reservation-page").length > 0) {
@@ -433,6 +559,12 @@
                         var customerHtml = '<a class="nav-link disabled" aria-disabled="true">Welcome, '+responses.first_name+" "+responses.last_name+'</a>';
                         $("#customer-nav").html(customerHtml);
                         $("#customer-nav").show();
+
+                        if($("input[name=customer_id]").length > 0) {
+
+                            $("input[name=customer_id]").val(responses.id);
+                            $("input[name=customer_email_address]").val(responses.email_address);
+                        }
 
                         // redirect
                         if(location.pathname.indexOf("login.html") != -1)
