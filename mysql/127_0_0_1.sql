@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-10-30 16:16:53
+-- 產生時間： 2024-11-15 16:01:13
 -- 伺服器版本： 10.4.21-MariaDB
 -- PHP 版本： 7.3.31
 
@@ -43,13 +43,6 @@ CREATE TABLE `customer` (
   `is_active` tinyint(1) NOT NULL COMMENT 'Is Active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- 傾印資料表的資料 `customer`
---
-
-INSERT INTO `customer` (`id`, `first_name`, `last_name`, `email_address`, `password`, `mailing_address`, `phone_number`, `created_at`, `updated_at`, `last_login_at`, `is_active`) VALUES
-(1, 'A', 'B', 'a@b.com', '900150983cd24fb0d6963f7d28e17f72', 'abc', '12345678', '2024-10-29 15:43:36', NULL, '2024-10-30 15:05:58', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -64,17 +57,18 @@ CREATE TABLE `movie` (
   `run_time` int(11) NOT NULL COMMENT 'Run Time',
   `language` varchar(100) NOT NULL COMMENT 'Language',
   `category` varchar(10) NOT NULL COMMENT 'Category',
-  `cover_image_url` text NOT NULL COMMENT 'Cover Image URL'
+  `cover_image_url` text NOT NULL COMMENT 'Cover Image URL',
+  `price` decimal(12,2) NOT NULL COMMENT 'Price'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- 傾印資料表的資料 `movie`
 --
 
-INSERT INTO `movie` (`id`, `name`, `publish_date`, `description`, `run_time`, `language`, `category`, `cover_image_url`) VALUES
-(1, 'Transformers One', '2024-10-31', 'This long-awaited origin story of how the most iconic characters in the TRANSFORMERS universe, Orion Pax and D-16, went from brothers-in-arms to become sworn enemies, Optimus Prime and Megatron', 104, 'Cantonese\r\n(Sub: N/A)', 'I', ''),
-(2, 'Venom: The Last Dance', '2024-11-02', 'In Venom: The Last Dance, Tom Hardy returns as Venom, one of Marvel’s greatest and most complex characters, for the final film in the trilogy. Eddie and Venom are on the run. Hunted by both of their worlds and with the net closing in, the duo are forced into a devastating decision that will bring the curtains down on Venom and Eddie\'s last dance.', 108, 'English\r\n(Sub: Chinese)', 'IIB', ''),
-(3, 'White Bird: A Wonder Story', '2024-11-01', 'From the best-selling author of Wonder, the book that sparked a movement to “choose kind,” comes the inspirational next chapter. In White Bird: A Wonder Story, we follow Julian (Bryce Gheisar), who has struggled to belong ever since he was expelled from his former school for his treatment of Auggie Pullman. To transform his life, Julian’s grandmother (Helen Mirren) finally reveals to Julian her own story of courage — during her youth in Nazi-occupied France, a boy shelters her from mortal danger. They find first love in a stunning, magical world of their own creation, while the boy’s mother (Gillian Anderson) risks everything to keep her safe. From director Marc Forster (Finding Neverland and Christopher Robin), screenwriter Mark Bomback, and based on R.J. Palacio’s book, White Bird: A Wonder Story, like Wonder before it, is an uplifting movie about how one act of kindness can live on forever.', 121, 'English\r\n(Sub: Chinese)', 'IIA', '');
+INSERT INTO `movie` (`id`, `name`, `publish_date`, `description`, `run_time`, `language`, `category`, `cover_image_url`, `price`) VALUES
+(1, 'Transformers One', '2024-10-31', 'This long-awaited origin story of how the most iconic characters in the TRANSFORMERS universe, Orion Pax and D-16, went from brothers-in-arms to become sworn enemies, Optimus Prime and Megatron', 104, 'Cantonese\r\n(Sub: N/A)', 'I', 'images/index/tranformer.jpg', '100.00'),
+(2, 'Venom: The Last Dance', '2024-11-02', 'In Venom: The Last Dance, Tom Hardy returns as Venom, one of Marvel’s greatest and most complex characters, for the final film in the trilogy. Eddie and Venom are on the run. Hunted by both of their worlds and with the net closing in, the duo are forced into a devastating decision that will bring the curtains down on Venom and Eddie\'s last dance.', 108, 'English\r\n(Sub: Chinese)', 'IIB', 'images/index/venom.jpg', '200.00'),
+(3, 'White Bird: A Wonder Story', '2024-11-01', 'From the best-selling author of Wonder, the book that sparked a movement to “choose kind,” comes the inspirational next chapter. In White Bird: A Wonder Story, we follow Julian (Bryce Gheisar), who has struggled to belong ever since he was expelled from his former school for his treatment of Auggie Pullman. To transform his life, Julian’s grandmother (Helen Mirren) finally reveals to Julian her own story of courage — during her youth in Nazi-occupied France, a boy shelters her from mortal danger. ', 121, 'English\r\n(Sub: Chinese)', 'IIA', 'images/index/wonder.jpg', '300.00');
 
 -- --------------------------------------------------------
 
@@ -115,7 +109,7 @@ CREATE TABLE `reservation` (
   `id` int(10) UNSIGNED NOT NULL,
   `customer_id` int(10) UNSIGNED NOT NULL COMMENT 'Customer ID',
   `movie_theatre_id` int(10) UNSIGNED NOT NULL COMMENT 'Movie Theatre ID',
-  `order_number` varchar(100) NOT NULL COMMENT 'Order Number',
+  `order_number` varchar(100) DEFAULT NULL COMMENT 'Order Number',
   `total_amount` decimal(12,2) NOT NULL COMMENT 'Total Amount',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Created At'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -169,23 +163,18 @@ INSERT INTO `seat` (`id`, `theatre_id`, `line`, `column`) VALUES
 (17, 2, 'B', 2),
 (18, 2, 'B', 3),
 (19, 2, 'B', 4),
-(20, 2, 'C', 1),
-(21, 2, 'C', 2),
-(22, 2, 'C', 3),
-(23, 2, 'C', 4),
-(24, 2, 'C', 5),
+(20, 2, 'B', 5),
+(21, 2, 'C', 1),
+(22, 2, 'C', 2),
+(23, 2, 'C', 3),
+(24, 2, 'C', 4),
 (25, 3, 'A', 1),
 (26, 3, 'A', 2),
 (27, 3, 'A', 3),
 (28, 3, 'B', 1),
 (29, 3, 'B', 2),
 (30, 3, 'B', 3),
-(31, 3, 'B', 4),
-(32, 3, 'C', 1),
-(33, 3, 'C', 2),
-(34, 3, 'C', 3),
-(35, 3, 'C', 4),
-(36, 3, 'C', 5);
+(31, 3, 'B', 4);
 
 -- --------------------------------------------------------
 
@@ -270,7 +259,7 @@ ALTER TABLE `theatre`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `movie`
@@ -300,7 +289,7 @@ ALTER TABLE `reservation_item`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `seat`
 --
 ALTER TABLE `seat`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `theatre`
@@ -318,20 +307,6 @@ ALTER TABLE `theatre`
 ALTER TABLE `movie_theatre`
   ADD CONSTRAINT `fk_theatre_movie` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_theatre_theatre` FOREIGN KEY (`theatre_id`) REFERENCES `theatre` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- 資料表的限制式 `reservation`
---
-ALTER TABLE `reservation`
-  ADD CONSTRAINT `fk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_movie_theatre` FOREIGN KEY (`movie_theatre_id`) REFERENCES `movie_theatre` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- 資料表的限制式 `reservation_item`
---
-ALTER TABLE `reservation_item`
-  ADD CONSTRAINT `fk_reservation` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_seat` FOREIGN KEY (`seat_id`) REFERENCES `seat` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 資料表的限制式 `seat`

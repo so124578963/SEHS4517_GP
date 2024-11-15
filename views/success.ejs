@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Good Show Cinema" />
+        <meta name="keywords" content="Good Show Cinema" />
+        <link href="http://localhost/SEHS4517_GP/images/favicon-32x32.png" rel="icon" type="image/png" />
+        <title>Good Show Cinema</title>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="http://localhost/SEHS4517_GP/css/bootstrap.min.css">
+
+        <!-- Slider CSS -->
+        <link rel="stylesheet" href="http://localhost/SEHS4517_GP/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="http://localhost/SEHS4517_GP/css/owl.theme.default.min.css">
+
+        <!-- Bootstrap Icon CSS -->
+        <link rel="stylesheet" href="http://localhost/SEHS4517_GP/css/bootstrap-icons.min.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="http://localhost/SEHS4517_GP/css/custom.css">
+    </head>
+    <body class="success-page">
+        
+        <!-- Nav Bar -->
+        <nav class="navbar navbar-expand-lg sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="http://localhost/SEHS4517_GP/index.html">
+                    <img src="http://localhost/SEHS4517_GP/images/logo.png" class="logo" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarToggler">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="http://localhost/SEHS4517_GP/index.html">Good Show Cinema</a>
+                        </li>
+                        <li class="nav-item" id="register-nav">
+                            <a class="nav-link" href="http://localhost/SEHS4517_GP/register.html">Registration</a>
+                        </li>
+                        <li class="nav-item" id="login-nav">
+                            <a class="nav-link active" href="http://localhost/SEHS4517_GP/login.html">Login</a>
+                        </li>
+                        <li class="nav-item" id="customer-nav" style="display: none;">
+                            <a class="nav-link disabled" aria-disabled="true"></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="logout-msg" class="toast text-bg-primary" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto">Message</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body"></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <section class="reservation-section">
+            <div class="container">
+                <div class="login-wrapper row justify-content-center">
+                    <h1>Thank You!</h1>
+                    <p>Your reservation has been successfully made. Let's enjoy your movie!</p>
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Customer Email Address:</strong> <%= customer_email_address %></li>
+                                <li class="list-group-item"><strong>Order Number:</strong> <%= order_number %></li>
+                                <li class="list-group-item"><strong>Movie Time:</strong> <%= start_time %></li>
+                                <li class="list-group-item"><strong>Total Amount:</strong> HKD$<%= total_amount %></li>
+                                <li class="list-group-item"><strong>Seat Number:</strong> <%= reservation_item %></li>
+                            </ul>
+                            <div class="text-center">
+                                <button class="btn btn-outline-success " onclick="location.href='http://localhost/SEHS4517_GP/index.html'">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="footer-section">
+            <div class="container">
+                <small class="text-body-secondary">Copyright © 2024 Good Show Cinema</small>
+            </div>
+        </section>
+
+        <!-- Scroll to top button -->
+        <div class="btn-scroll-to-top">
+            <i class="bi bi-arrow-up-circle"></i>
+        </div>
+
+    </body>
+
+    <!-- jQuery -->
+    <script src="http://localhost/SEHS4517_GP/js/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="http://localhost/SEHS4517_GP/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Slider JS -->
+    <script src="http://localhost/SEHS4517_GP/js/owl.carousel.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="http://localhost/SEHS4517_GP/js/custom.js"></script>
+</html>

@@ -356,8 +356,6 @@
                         // register form handler
                         if(reservation._reservationForm.length > 0) {
                             reservation.reserve();
-
-                            console.log("here");
                         }
                     }
 
@@ -462,7 +460,7 @@
                         $.each(dbData, function(index, item) {
 
                             var disabled = false;
-                            if(item.reservation_item_id)
+                            if(item.reservation_id)
                             {
                                 disabled = true;
                             }
@@ -505,8 +503,25 @@
                 },
                 success: function(responses) {
 
-                    reservation._reservationForm.find("#form-msg").find(".toast-body").text(responses.message);
-                    formAlert.show();
+                    if(responses.success)
+                    {
+                        reservation._reservationForm.find("#form-msg").find(".toast-body").text(responses.message);
+                        formAlert.show();
+
+                        var reservationItem = responses.order.reservation_item.join(", ");
+
+                        var url = 'http://localhost:8080/success';
+                        var form = $('<form action="' + url + '" method="post">' +
+                            '<input type="hidden" name="customer_email_address" value="' + responses.order.customer_email_address + '" />' +
+                            '<input type="hidden" name="order_number" value="' + responses.order.order_number + '" />' +
+                            '<input type="hidden" name="start_time" value="' + responses.order.start_time + '" />' +
+                            '<input type="hidden" name="total_amount" value="' + responses.order.total_amount + '" />' +
+                            '<input type="hidden" name="reservation_item" value="' + reservationItem + '" />' +
+                            '</form>');
+
+                        $('body').append(form);
+                        form.submit();
+                    }
                 },
                 error: function() {
 
@@ -539,7 +554,7 @@
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: 'action/check_customer_session.php',
+                url: 'http://localhost/SEHS4517_GP/action/check_customer_session.php',
                 data: data,
                 success: function (responses) {
 
@@ -556,7 +571,7 @@
                         var registerHtml = '<a class="nav-link" href="reservation.html">Reservation</a>';
                         $("#register-nav").html(registerHtml);
 
-                        var customerHtml = '<a class="nav-link disabled" aria-disabled="true">Welcome, '+responses.first_name+" "+responses.last_name+'</a>';
+                        var customerHtml = '<a class="nav-link disabled" aria-disabled="true">Welcome, '+responses.first_name+" "+responses.last_name+'&nbsp;<i class="bi bi-person-fill"></i></a>';
                         $("#customer-nav").html(customerHtml);
                         $("#customer-nav").show();
 

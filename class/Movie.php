@@ -58,11 +58,11 @@ class Movie extends Database
 
         // db connect
         $pdo = parent::getConnection();
-        $sql = "SELECT mt.id AS movie_theatre_id, mt.start_time, s.id AS seat_id, s.line, s.column, r.id AS reservation_id, ri.id AS reservation_item_id 
-        FROM movie_theatre mt 
-        JOIN seat s ON s.theatre_id = mt.theatre_id
-        LEFT JOIN reservation r ON r.movie_theatre_id = mt.id
-        LEFT JOIN reservation_item ri ON ri.seat_id = s.id AND ri.reservation_id = r.id
+        $sql = "SELECT mt.id AS movie_theatre_id, mt.start_time, s.id AS seat_id, s.line, s.column, r.id AS reservation_id 
+        FROM seat s 
+        JOIN movie_theatre mt ON mt.theatre_id = s.theatre_id
+        LEFT JOIN reservation_item ri ON ri.seat_id = s.id 
+        LEFT JOIN reservation r ON r.id = ri.reservation_id AND r.movie_theatre_id = mt.id
         WHERE mt.id = :id
         ORDER BY s.id ASC
         ";
@@ -97,6 +97,9 @@ class Movie extends Database
 
         // update order number
         $orderNumber = "ORDER".str_pad($lastInsertId, 7, "0", STR_PAD_LEFT);
+        $totalAmount = $sqlBindData["total_amount"];
+        $movieTheatreId = $sqlBindData["movie_theatre_id"];
+        $customerId = $sqlBindData["customer_id"];
 
         $sql = "UPDATE `reservation` SET order_number = :order_number WHERE id = :id";
 
@@ -122,6 +125,39 @@ class Movie extends Database
 
         $result["success"] = true;
         $result["message"] = "Reservation Success. You can enjoy the movie now.";
+
+        // prepare data for node js
+        // Start Session
+        if(session_id() == '')  
+        {
+            session_start();
+        }
+
+        $result["order"] = array(
+            "customer_email_address" => $_SESSION["customer"]["email_address"],
+            "order_number" => $orderNumber,
+            "total_amount" => $totalAmount,
+        );
+
+        $sql = "SELECT mt.id AS movie_theatre_id, mt.start_time, s.id AS seat_id, s.line, s.column, ri.id AS reservation_item_id 
+        FROM movie_theatre mt 
+        JOIN seat s ON s.theatre_id = mt.theatre_id
+        JOIN reservation r ON r.movie_theatre_id = mt.id
+        JOIN reservation_item ri ON ri.seat_id = s.id AND ri.reservation_id = r.id
+        WHERE mt.id = :movie_theatre_id
+        AND r.id = :reservation_id
+        ORDER BY s.id ASC
+        ";
+        $dbData = parent::fetchAll($pdo, $sql, array("movie_theatre_id" => $movieTheatreId, "reservation_id" => $lastInsertId));
+
+        $reservationItems = array();
+        foreach ($dbData as $row) 
+        {
+            $result["order"]["start_time"] = date("F j, Y, g:i a", strtotime($row["start_time"]));
+            $reservationItems[] = $row["line"].$row["column"];
+        }
+
+        $result["order"]["reservation_item"] = $reservationItems;
 
         return $result;
     }
