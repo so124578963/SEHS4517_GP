@@ -2,6 +2,7 @@
 
 require_once '../class/Member.php';
 
+// customer login and save the customer data into SESSION
 if($_SERVER['REQUEST_METHOD'] === "POST")
 {
     $member = new Member();

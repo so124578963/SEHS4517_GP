@@ -2,6 +2,7 @@
 
 require_once '../class/Movie.php';
 
+// get timeslots list
 if($_SERVER['REQUEST_METHOD'] === "POST")
 {
     if(isset($_POST['action']) && $_POST['action'] == 'theatre_list')

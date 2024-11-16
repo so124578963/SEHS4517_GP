@@ -10,13 +10,21 @@ class Database
     protected $_connection;
 
     public function __construct()
-    {
+    {   
+        // auto connect db
         if(!$this->_connection)
         {
             $this->_connection = $this->_connectDb(self::DB_HOST, self::DB_DBNAME, self::DB_USERNAME, self::DB_PASSWORD);
         }
     }
 
+    /**
+     * @param  string  $host      db host
+     * @param  string  $db        db name
+     * @param  string  $username  db login username
+     * @param  string  $password  db login password
+     * @return object  $pdo       pdo
+     */
     protected function _connectDb($host, $db, $username, $password)
     {
         return new PDO("mysql:host={$host};dbname={$db};charset=utf8", $username, $password, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
@@ -33,17 +41,23 @@ class Database
      * @param  array  $bindData list of bind data with values
      * @return array  $data     assoc array of one row data
      */
-    public function fetchOne($pdo, $sql, $bindData = array()) {
+    public function fetchOne($sql, $bindData = array()) {
 
+        // get db connection
+        $pdo = $this->getConnection();
+
+        // bind data to avoid sql injection
         $data = array();
         foreach ($bindData as $key => $value) {
             $data[$key] = $this->removeXSS($value);
         }
 
+        // execute query
         $stmt = $pdo->prepare($sql);
         $stmt->execute($data);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        // retund db data
         return $result;
     }
 
@@ -51,19 +65,25 @@ class Database
      * @param  object $pdo      php pdo db connection
      * @param  string $sql      mysql query
      * @param  array  $bindData list of bind data with values
-     * @return array  $data     assoc array of all row data
+     * @return array  $result   assoc array of all row data
     */
-    public function fetchAll($pdo, $sql, $bindData = array()) 
+    public function fetchAll($sql, $bindData = array()) 
     {
+        // get db connection
+        $pdo = $this->getConnection();
+
+        // bind data to avoid sql injection
         $data = array();
         foreach ($bindData as $key => $value) {
             $data[$key] = $this->removeXSS($value);
         }
 
+        // execute query
         $stmt = $pdo->prepare($sql);
         $stmt->execute($data);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        // retund db data
         return $result;
     }
 
@@ -73,17 +93,23 @@ class Database
      * @param  array  $bindData     list of bind data with values
      * @return int    $lastInsertId auto increment id of row
      */
-    public function insertQuery($pdo, $sql, $bindData = array()) 
+    public function insertQuery($sql, $bindData = array()) 
     {
+        // get db connection
+        $pdo = $this->getConnection();
+
+        // bind data to avoid sql injection
         $data = array();
         foreach ($bindData as $key => $value) {
             $data[$key] = $this->removeXSS($value);
         }
 
+        // execute query
         $stmt = $pdo->prepare($sql);
         $stmt->execute($data);
         $lastInsertId = $pdo->lastInsertId();
 
+        // retund last insert id
         return $lastInsertId;
     }
 
@@ -93,17 +119,23 @@ class Database
      * @param  array  $bindData list of bind data with values
      * @return int    $rowCount affeced amount of row
      */
-    public function updateQuery($pdo, $sql, $bindData = array()) {
+    public function updateQuery($sql, $bindData = array()) 
+    {
+        // get db connection
+        $pdo = $this->getConnection();
 
+        // bind data to avoid sql injection
         $data = array();
         foreach ($bindData as $key => $value) {
             $data[$key] = $this->removeXSS($value);
         }
 
+        // execute query
         $stmt = $pdo->prepare($sql);
         $stmt->execute($data); 
         $rowCount = $stmt->rowCount();
 
+        // retund updated row count
         return $rowCount;
     }
 
@@ -113,8 +145,8 @@ class Database
      * @param  string $val string need to remove XXS
      * @return string $val string of after remove xss
     */
-    public function removeXSS($val) {
-        
+    public function removeXSS($val) 
+    {
         $val = preg_replace('/([\x00-\x08,\x0b-\x0c,\x0e-\x19])/', '', $val);
         $search = 'abcdefghijklmnopqrstuvwxyz';
         $search .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';

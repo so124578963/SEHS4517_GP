@@ -2,6 +2,7 @@
 
 require_once '../class/Member.php';
 
+// customer register 
 if($_SERVER['REQUEST_METHOD'] === "POST")
 {
     $member = new Member();

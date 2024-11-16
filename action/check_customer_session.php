@@ -1,5 +1,6 @@
 <?php
 
+// check customer had logined or not from SESSION
 if($_SERVER['REQUEST_METHOD'] === "POST")
 {
     if(isset($_POST['action']) && $_POST['action'] == 'session')

@@ -6,14 +6,15 @@ e.g. C:\xampp\htdocs\SEHS4517_GP
 3. open browser, access http://localhost/phpmyadmin/
 4. click "Import/匯入" on the top menu bar
 5. upload the sql file "C:\xampp\htdocs\SEHS4517_GP\mysql\127_0_0_1.sql"
-6. install Node.js on your PC
-7. open cmd, run below command 
+6. update DB config file: class\Database.php
+7. install Node.js on your PC
+8. open cmd, run below command 
 npm install express
 npm install ejs
 npm install cors
-8. cd C:\xampp\htdocs\SEHS4517_GP
-9. run "node server.js"
-10. open browser, access http://localhost/SEHS4517_GP/
+9. cd C:\xampp\htdocs\SEHS4517_GP
+10. run "node server.js"
+11. open browser, access http://localhost/SEHS4517_GP/
 
 ---------------------------------------------------------------------------------------------------
 
@@ -27,8 +28,8 @@ b. File Structure
 6. mysql  - mysql query statement file
 7. views  - Node.js EJS template files
 
-index.html = 1st page
-register.html = 2nd page
-login.html = 3rd page
-reservation.html = 4th page
-server.js = Node.js 5th page
+c. index.html = 1st page
+d. register.html = 2nd page
+e. login.html = 3rd page
+f. reservation.html = 4th page
+g. server.js = Node.js 5th page

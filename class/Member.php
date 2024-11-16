@@ -4,19 +4,22 @@ require_once 'Database.php';
 
 class Member extends Database
 {
+    /**
+     * customer register function
+     * @param  array   $data    parameter data
+     * @return array   $result  message
+     */
     public function register($data)
     {
+        // preset result data
         $result = array(
             "success" => false,
             "message" => "",
         );
 
-        // db connect
-        $pdo = parent::getConnection();
-
         // check email address exist
         $sql = "SELECT * FROM customer WHERE email_address = :email_address";
-        $dbData = parent::fetchAll($pdo, $sql, array("email_address" => $data["email_address"]));
+        $dbData = parent::fetchAll($sql, array("email_address" => $data["email_address"]));
 
         if(count($dbData) > 0)
         {
@@ -37,8 +40,10 @@ class Member extends Database
                 "phone_number" => $data["phone_number"],
             );
 
-            $lastInsertId = parent::insertQuery($pdo, $sql, $sqlBindData);
+            // get last insert id
+            $lastInsertId = parent::insertQuery($sql, $sqlBindData);
 
+            // customer success added
             $result["success"] = true;
             $result["message"] = "Member Register Success. You can login the account on Login Page.";
         }
@@ -46,35 +51,42 @@ class Member extends Database
         return $result;
     }
 
+    /**
+     * customer login function
+     * @param  array   $data    parameter data
+     * @return array   $result  message
+     */
     public function login($data)
     {
+        // preset result data
         $result = array(
             "success" => false,
             "message" => "",
         );
 
-        // db connect
-        $pdo = parent::getConnection();
-
         // check email address exist
         $sql = "SELECT * FROM customer WHERE email_address = :email_address AND password = :password";
-        $dbData = parent::fetchOne($pdo, $sql, array("email_address" => $data["email_address"], "password" => md5($data["password"])));
+        $dbData = parent::fetchOne($sql, array("email_address" => $data["email_address"], "password" => md5($data["password"])));
 
         if($dbData)
         {
+            // customer data exist
             $customer = $dbData;
 
             // Login Success
             $sql = "UPDATE `customer` SET last_login_at = NOW() WHERE id = :id;";
 
-            $rowCount = parent::updateQuery($pdo, $sql, array("id" => $customer["id"]));
+            // update customer last login time
+            $rowCount = parent::updateQuery($sql, array("id" => $customer["id"]));
             
+            // customer success login data and set customer data into $result
             $result["success"] = true;
             $result["customer"] = $customer;
-            $result["message"] = "Login Success: Wait for 5 seconds to go to Reservation page.";
+            $result["message"] = "Login Success: Wait for 3 seconds to go to Reservation page.";
         }
         else
         {
+            // customer data not exist
             $result["message"] = "Login Fail: Account Exist, you can go back to Home Page";
         }
 

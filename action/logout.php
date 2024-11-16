@@ -5,6 +5,7 @@ $result = array(
     "message" => "",
 );
 
+// customer logout and remove customer data from SESSION
 if($_SERVER['REQUEST_METHOD'] === "POST")
 {
     if(isset($_POST['action']) && $_POST['action'] == 'logout')

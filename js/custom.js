@@ -288,7 +288,7 @@
                         // count down to refresh
                         setTimeout(function(){
                             location.reload(); 
-                        }, 5000); 
+                        }, 3000); 
                     }
                     else
                     {
@@ -650,13 +650,13 @@
                             var formAlert = new bootstrap.Toast(formMsg);
 
                             // display toast message to ask customer login first
-                            $("#logout-msg").find(".toast-body").text("Please Login First. After 5 second will redirect to Login page.");
+                            $("#logout-msg").find(".toast-body").text("Please Login First. After 3 second will redirect to Login page.");
                             formAlert.show();
 
                             // count down to refresh
                             setTimeout(function(){
                                 location.href="login.html";
-                            }, 5000); 
+                            }, 3000); 
                         }
                     }
                 },

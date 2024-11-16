@@ -4,36 +4,42 @@ require_once 'Database.php';
 
 class Movie extends Database
 {
+    /**
+     * get movie list function
+     * @return array   $result  movies data
+     */
     public function getMovieList()
     {
+        // preset result data
         $result = array(
             "success" => false,
             "message" => "",
         );
 
-        // db connect
-        $pdo = parent::getConnection();
-
-        // check email address exist
+        // select all movie
         $sql = "SELECT * FROM movie WHERE 1";
-        $dbData = parent::fetchAll($pdo, $sql, array());
+        $dbData = parent::fetchAll($sql, array());
 
+        // set data into $result
         $result["success"] = true;
         $result["message"] = $dbData;
 
         return $result;
     }
 
+    /**
+     * get timeslots list function
+     * @return array   $result  timeslots data
+     */
     public function getTheatreList()
     {
+        // preset result data
         $result = array(
             "success" => false,
             "message" => "",
         );
 
-        // db connect
-        $pdo = parent::getConnection();
-
+        // select all movie data and timeslots data
         $sql = "SELECT m.*, t.name AS theatre_name, mt.id AS movie_theatre_id, mt.start_time 
         FROM movie_theatre mt 
         JOIN movie m ON m.id = mt.movie_id 
@@ -41,23 +47,29 @@ class Movie extends Database
         WHERE 1
         ORDER BY mt.start_time ASC
         ";
-        $dbData = parent::fetchAll($pdo, $sql, array());
+        $dbData = parent::fetchAll($sql, array());
 
+        // set data into $result
         $result["success"] = true;
         $result["message"] = $dbData;
 
         return $result;
     }
 
+    /**
+     * get all available seating plan by a certain timeslot
+     * @param  array   $movieTheatreId   timeslot id
+     * @return array   $result           message
+     */
     public function getAvailableSeatList($movieTheatreId)
     {
+        // preset result data
         $result = array(
             "success" => false,
             "message" => "",
         );
 
-        // db connect
-        $pdo = parent::getConnection();
+        // select all available seating plan data, include those seat which ordered before
         $sql = "SELECT mt.id AS movie_theatre_id, mt.start_time, s.id AS seat_id, s.line, s.column, r.id AS reservation_id 
         FROM seat s 
         JOIN movie_theatre mt ON mt.theatre_id = s.theatre_id
@@ -66,56 +78,65 @@ class Movie extends Database
         WHERE mt.id = :id
         ORDER BY s.id ASC
         ";
-        $dbData = parent::fetchAll($pdo, $sql, array("id" => $movieTheatreId));
+        $dbData = parent::fetchAll($sql, array("id" => $movieTheatreId));
 
+        // set data into $result
         $result["success"] = true;
         $result["message"] = $dbData;
 
         return $result;
     }
 
+    /**
+     * customer reservation function
+     * @param  array   $data    parameter data
+     * @return array   $result  message
+     */
     public function reservation($data)
     {
+        // preset result data
         $result = array(
             "success" => false,
             "message" => "",
         );
 
-        // db connect
-        $pdo = parent::getConnection();
-
-        // add record to table
+        // add reservation record to table
         $sql = "INSERT INTO `reservation`(`customer_id`, `movie_theatre_id`, `total_amount`, `created_at`) VALUES (:customer_id, :movie_theatre_id, :total_amount, NOW())";
 
+        // prepare data
         $totalAmount = $data["price"]*count($data["seat_id"];
         $movieTheatreId = $data["movie_theatre_id"];
         $customerId = $data["customer_id"];
 
+        // bind data to avoid sql injection
         $sqlBindData = array(
             "customer_id" => $customerId,
             "movie_theatre_id" => $movieTheatreId,
             "total_amount" => $totalAmount,
         );
 
+        // get the last insert id to ready add ticket seating plan record
         $lastInsertId = parent::insertQuery($pdo, $sql, $sqlBindData);
 
         // update order number
         $orderNumber = "ORDER".str_pad($lastInsertId, 7, "0", STR_PAD_LEFT);
-
         $sql = "UPDATE `reservation` SET order_number = :order_number WHERE id = :id";
 
+        // bind data to avoid sql injection
         $sqlBindData = array(
             "order_number" => $orderNumber,
             "id" => $lastInsertId,
         );
 
+        // update order number
         $rowCount = parent::updateQuery($pdo, $sql, $sqlBindData);
 
-        // add ticket record to table
+        // add ticket seating plan record to table
         foreach ($data["seat_id"] as $seatId) 
         {
             $sql = "INSERT INTO `reservation_item`(`reservation_id`, `seat_id`) VALUES (:reservation_id, :seat_id)";
 
+            // bind data to avoid sql injection
             $sqlBindData = array(
                 "reservation_id" => $lastInsertId,
                 "seat_id" => $seatId,
@@ -124,16 +145,11 @@ class Movie extends Database
             parent::insertQuery($pdo, $sql, $sqlBindData);
         }
 
+        // set data into $result
         $result["success"] = true;
         $result["message"] = "Reservation Success. You can enjoy the movie now.";
 
-        // prepare data for node js
-        // Start Session
-        if(session_id() == '')  
-        {
-            session_start();
-        }
-
+        // prepare data for node.js
         $result["order"] = array(
             "customer_email_address" => $_SESSION["customer"]["email_address"],
             "customer_name" => $_SESSION["customer"]["first_name"]." ".$_SESSION["customer"]["last_name"],
@@ -141,6 +157,7 @@ class Movie extends Database
             "total_amount" => $totalAmount,
         );
 
+        // select reservation data for node.js success page
         $sql = "SELECT mt.id AS movie_theatre_id, mt.start_time, s.id AS seat_id, s.line, s.column, ri.id AS reservation_item_id 
         FROM movie_theatre mt 
         JOIN seat s ON s.theatre_id = mt.theatre_id
@@ -159,6 +176,7 @@ class Movie extends Database
             $reservationItems[] = $row["line"].$row["column"];
         }
 
+        // set data into $result
         $result["order"]["reservation_item"] = $reservationItems;
 
         return $result;

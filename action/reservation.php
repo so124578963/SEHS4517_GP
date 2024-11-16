@@ -2,6 +2,7 @@
 
 require_once '../class/Movie.php';
 
+// customer reservation
 if($_SERVER['REQUEST_METHOD'] === "POST")
 {
     $movie = new Movie();
