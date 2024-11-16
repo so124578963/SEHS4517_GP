@@ -236,6 +236,10 @@
                     // display toast message aftet form submit success
                     member._registerForm.find("#form-msg").find(".toast-body").text(responses.message);
                     formAlert.show();
+
+                    // disable the submit button
+                    $('button[type=submit]').prop('disabled', true);
+
                 },
                 error: function() {
 
