@@ -513,6 +513,7 @@
                         var url = 'http://localhost:8080/success';
                         var form = $('<form action="' + url + '" method="post">' +
                             '<input type="hidden" name="customer_email_address" value="' + responses.order.customer_email_address + '" />' +
+                            '<input type="hidden" name="customer_name" value="' + responses.order.customer_name + '" />' +
                             '<input type="hidden" name="order_number" value="' + responses.order.order_number + '" />' +
                             '<input type="hidden" name="start_time" value="' + responses.order.start_time + '" />' +
                             '<input type="hidden" name="total_amount" value="' + responses.order.total_amount + '" />' +
@@ -554,7 +555,7 @@
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: 'http://localhost/SEHS4517_GP/action/check_customer_session.php',
+                url: 'action/check_customer_session.php',
                 data: data,
                 success: function (responses) {
 

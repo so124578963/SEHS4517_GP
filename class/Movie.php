@@ -87,19 +87,20 @@ class Movie extends Database
         // add record to table
         $sql = "INSERT INTO `reservation`(`customer_id`, `movie_theatre_id`, `total_amount`, `created_at`) VALUES (:customer_id, :movie_theatre_id, :total_amount, NOW())";
 
+        $totalAmount = $data["price"]*count($data["seat_id"];
+        $movieTheatreId = $data["movie_theatre_id"];
+        $customerId = $data["customer_id"];
+
         $sqlBindData = array(
-            "customer_id" => $data["customer_id"],
-            "movie_theatre_id" => $data["movie_theatre_id"],
-            "total_amount" => $data["price"]*count($data["seat_id"]),
+            "customer_id" => $customerId,
+            "movie_theatre_id" => $movieTheatreId,
+            "total_amount" => $totalAmount,
         );
 
         $lastInsertId = parent::insertQuery($pdo, $sql, $sqlBindData);
 
         // update order number
         $orderNumber = "ORDER".str_pad($lastInsertId, 7, "0", STR_PAD_LEFT);
-        $totalAmount = $sqlBindData["total_amount"];
-        $movieTheatreId = $sqlBindData["movie_theatre_id"];
-        $customerId = $sqlBindData["customer_id"];
 
         $sql = "UPDATE `reservation` SET order_number = :order_number WHERE id = :id";
 
@@ -135,6 +136,7 @@ class Movie extends Database
 
         $result["order"] = array(
             "customer_email_address" => $_SESSION["customer"]["email_address"],
+            "customer_name" => $_SESSION["customer"]["first_name"]." ".$_SESSION["customer"]["last_name"],
             "order_number" => $orderNumber,
             "total_amount" => $totalAmount,
         );

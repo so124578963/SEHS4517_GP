@@ -39,13 +39,14 @@
                             <a class="nav-link" aria-current="page" href="http://localhost/SEHS4517_GP/index.html">Good Show Cinema</a>
                         </li>
                         <li class="nav-item" id="register-nav">
-                            <a class="nav-link" href="http://localhost/SEHS4517_GP/register.html">Registration</a>
+                            <a class="nav-link" href="http://localhost/SEHS4517_GP/reservation.html">Reservation</a>
                         </li>
                         <li class="nav-item" id="login-nav">
-                            <a class="nav-link active" href="http://localhost/SEHS4517_GP/login.html">Login</a>
+                            <a class="nav-link" id="logout-btn" href="#">Logout</a>
                         </li>
-                        <li class="nav-item" id="customer-nav" style="display: none;">
-                            <a class="nav-link disabled" aria-disabled="true"></a>
+                        <li class="nav-item" id="customer-nav">
+                            <a class="nav-link disabled" aria-disabled="true">Welcome, <%= customer_name %></a>
+                            <i class="bi bi-person-fill"></i>
                         </li>
                     </ul>
                 </div>
@@ -89,11 +90,6 @@
                 <small class="text-body-secondary">Copyright © 2024 Good Show Cinema</small>
             </div>
         </section>
-
-        <!-- Scroll to top button -->
-        <div class="btn-scroll-to-top">
-            <i class="bi bi-arrow-up-circle"></i>
-        </div>
 
     </body>
 
