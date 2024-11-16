@@ -116,7 +116,7 @@ class Movie extends Database
         );
 
         // get the last insert id to ready add ticket seating plan record
-        $lastInsertId = parent::insertQuery($pdo, $sql, $sqlBindData);
+        $lastInsertId = parent::insertQuery($sql, $sqlBindData);
 
         // update order number
         $orderNumber = "ORDER".str_pad($lastInsertId, 7, "0", STR_PAD_LEFT);
@@ -129,7 +129,7 @@ class Movie extends Database
         );
 
         // update order number
-        $rowCount = parent::updateQuery($pdo, $sql, $sqlBindData);
+        $rowCount = parent::updateQuery($sql, $sqlBindData);
 
         // add ticket seating plan record to table
         foreach ($data["seat_id"] as $seatId) 
@@ -142,7 +142,7 @@ class Movie extends Database
                 "seat_id" => $seatId,
             );
 
-            parent::insertQuery($pdo, $sql, $sqlBindData);
+            parent::insertQuery($sql, $sqlBindData);
         }
 
         // set data into $result
@@ -167,7 +167,7 @@ class Movie extends Database
         AND r.id = :reservation_id
         ORDER BY s.id ASC
         ";
-        $dbData = parent::fetchAll($pdo, $sql, array("movie_theatre_id" => $movieTheatreId, "reservation_id" => $lastInsertId));
+        $dbData = parent::fetchAll($sql, array("movie_theatre_id" => $movieTheatreId, "reservation_id" => $lastInsertId));
 
         $reservationItems = array();
         foreach ($dbData as $row) 
