@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST")
         unset($_SESSION["customer"]);
 
         $result["success"] = true;
-        $result["message"] = "Logout Success. Wait for 5 second to refresh the page.";
+        $result["message"] = "Logout Success. Wait for 3 seconds to refresh the page.";
     }
 }
 

@@ -2,13 +2,15 @@
 
     
 
-    // Index Page
+    // index.html function
     var home = {
 
         init: function() {
 
+            // index page promotion slider - owl carousel slider
             home.slider();
 
+            // index page movie slider - owl carousel slider
             home.getMovieList();
         },
 
@@ -18,6 +20,7 @@
                 action: "movie_list"
             };
 
+            // user ajax to connect php and get the movie list
             $.ajax({
                 type: "POST",
                 dataType: "json",
@@ -33,6 +36,7 @@
 
                         var movieHtml = "";
 
+                        // strucutre the html code
                         $.each(dbData, function(index, item) {
                             
                             movieHtml += '<div class="movie-item row justify-content-center">';
@@ -91,9 +95,11 @@
                             movieHtml += '</div>';
 
                         });
-
+                        
+                        // paste html code to web page
                         $(".movie-wrapper").html(movieHtml);
 
+                        // start the slider, support responsive
                         $(".movie-wrapper").owlCarousel({
 
                             loop: true,
@@ -122,6 +128,7 @@
 
         slider: function() {
 
+            // start the slider, support responsive
             $(".index-slider").owlCarousel({
 
                 loop: true,
@@ -151,15 +158,18 @@
         home.init();
     }
 
-    // Member 
+    // register.html + login.tml function 
     var member = {
 
+        // register form selector
         _registerForm: $("#register-form"),
 
+        // login form selector
         _loginForm: $("#login-form"),
 
         init: function() {
 
+            // the validation step of forms
             member.validation();
         },
 
@@ -167,6 +177,7 @@
 
             const forms = document.querySelectorAll('.needs-validation');
 
+            // add event listener on form to validate the form
             Array.from(forms).forEach(form => {
                 form.addEventListener('submit', event => {
                     if (!form.checkValidity()) 
@@ -195,6 +206,7 @@
 
         register: function() {
 
+            // ready to submit register form
             const formMsg = document.getElementById('form-msg');
             var formAlert = new bootstrap.Toast(formMsg);
 
@@ -214,12 +226,14 @@
                 type: "POST",
                 data: data,
                 dataType: 'json',
-                beforeSend: function(responses) {
+                beforeSend: function() {
 
+                    // display spinner before form submit complete
                     common.spinnerLoader(true, member._registerForm);
                 },
                 success: function(responses) {
 
+                    // display toast message aftet form submit success
                     member._registerForm.find("#form-msg").find(".toast-body").text(responses.message);
                     formAlert.show();
                 },
@@ -231,6 +245,7 @@
                 },
                 complete: function() {
 
+                    // hide spinner after form submit complete
                     common.spinnerLoader(false, member._registerForm);
                 }
             });
@@ -238,6 +253,7 @@
 
         login: function() {
 
+            // ready to submit login form
             const formMsg = document.getElementById('form-msg');
             var formAlert = new bootstrap.Toast(formMsg);
 
@@ -255,24 +271,28 @@
                 dataType: 'json',
                 beforeSend: function(responses) {
 
+                    // display spinner before form submit complete
                     common.spinnerLoader(true, member._loginForm);
-
+                    
+                    // hide the home page hyper link before form submit complete
                     member._loginForm.find("#form-msg").find(".index-btn").hide();
                 },
                 success: function(responses) {
 
                     if(responses.success)
                     {
+                        // display toast message aftet form submit success
                         member._loginForm.find("#form-msg").find(".toast-body").text(responses.message);
                         formAlert.show();
 
                         // count down to refresh
                         setTimeout(function(){
                             location.reload(); 
-                    }, 5000); 
+                        }, 5000); 
                     }
                     else
                     {
+                        // display 1st page hyperlink aftet form submit fail, "created by you with a button for the user to press and go back to the first web page."
                         member._loginForm.find("#form-msg").find(".toast-msg").text(responses.message);
                         member._loginForm.find("#form-msg").find(".index-btn").show();
                         formAlert.show();
@@ -286,6 +306,7 @@
                 },
                 complete: function() {
 
+                    // hide spinner after form submit complete
                     common.spinnerLoader(false, member._loginForm);
                 }
             });
@@ -293,10 +314,12 @@
 
         logout: function() {
 
+            // ready to submit login form
             var data = {
                 action: "logout"
             };
 
+            // use ajax http request
             $.ajax({
                 type: "POST",
                 dataType: "json",
@@ -306,6 +329,7 @@
 
                     if(responses.success)
                     {
+                        // display toast message aftet form submit success
                         const formMsg = document.getElementById('logout-msg');
                         var formAlert = new bootstrap.Toast(formMsg);
 
@@ -315,7 +339,7 @@
                         // count down to refresh
                         setTimeout(function(){
                             location.reload(); 
-                        }, 5000); 
+                        }, 3000); 
                     }
                 },
             });
@@ -326,17 +350,21 @@
         member.init();
     }
 
-    // Reservation
+    // reservation.html funciton
     var reservation = {
 
+        // reservation form selector
         _reservationForm: $("#reservation-form"),
 
         init: function() {
 
+            // use index page movie list slider to display on reservation.html
             home.getMovieList();
 
+            // get movie list and insert the options of movie into <select>
             reservation.getMovieList();
 
+            // the validation step of forms
             reservation.validation();
         },
         
@@ -344,6 +372,7 @@
 
             const forms = document.querySelectorAll('.needs-validation');
 
+            // add event listener on form to validate the form
             Array.from(forms).forEach(form => {
                 form.addEventListener('submit', event => {
                     if (!form.checkValidity()) 
@@ -353,7 +382,7 @@
                     }
                     else
                     {
-                        // register form handler
+                        // reservation form handler
                         if(reservation._reservationForm.length > 0) {
                             reservation.reserve();
                         }
@@ -371,6 +400,7 @@
                 action: "theatre_list"
             };
 
+            // use ajax http request
             $.ajax({
                 type: "POST",
                 dataType: "json",
@@ -384,6 +414,7 @@
 
                         $.each(dbData, function(index, item) {
                             
+                            // paste the options of movie into <select> for reservation form
                             $("#movie-option").append($('<option>', { 
                                 value: item.id,
                                 text : item.name,
@@ -392,9 +423,11 @@
                         });
 
                         $("#movie-option").on("change", function() {
+
+                            // after customers selected the movie, will reload the timeslots of movie for customers to choose
                             reservation.reloadTimeSlot(this.value, dbData);
 
-                            //apply price to hidden value
+                            // apply price of ticket to hidden value
                             $("input[name=price]").val($(this).find(':selected').attr('data_price'));
                         });
                     }
@@ -403,32 +436,37 @@
         },
 
         reloadTimeSlot: function(value, data) {
-
+            
+            // loop the timeslots data
             $.each(data, function(index, item) {
 
                 if(value == item.id)
                 {
+                    // reset <select> of timeslot
                     $("#movie-timeslot").html("");
-
                     $("#movie-timeslot").append('<option selected disabled value="">Please Choose Time Slot</option>');
 
+                    // reset <select> of seating plan
                     $("#movie-seat").html("");
-
                     $("#movie-seat").append('<option selected disabled value="">Please Choose Seat</option>');
 
                     $.each(item.timeslot, function(index, time) {
 
                         const date = new Date(time.start_time);
-                            
+                        
+                        // paste the options of timeslots into <select> for reservation form
                         $("#movie-timeslot").append($('<option>', { 
                             value: time.movie_theatre_id,
                             text : date.toDateString()+" "+date.toLocaleTimeString().replace(/(.*)\D\d+/, '$1')+" ("+time.theatre_name+")" 
                         }));
                     });
-
+                    
+                    // after the options of timeslots ready, enable this <select>
                     $("#movie-timeslot").prop('disabled', false);
 
                     $("#movie-timeslot").on("change", function() {
+
+                        // after customers selected the timeslot, will reload the seating plan of movie for customers to choose
                         reservation.reloadSeatPlan(this.value);
                     });
                 }
@@ -437,8 +475,8 @@
 
         reloadSeatPlan: function(value) {
 
+            // reset <select> of seating plan
             $("#movie-seat").html("");
-
             $("#movie-seat").append('<option selected disabled value="">Please Choose Seat</option>');
             
             var data = {
@@ -446,6 +484,7 @@
                 movie_theatre_id: value,
             };
 
+            // use ajax http request
             $.ajax({
                 type: "POST",
                 dataType: "json",
@@ -457,14 +496,17 @@
                     {
                         var dbData = responses.message;
 
+                        // loop the seating plan data
                         $.each(dbData, function(index, item) {
 
                             var disabled = false;
                             if(item.reservation_id)
                             {
+                                // if the seat is ordered by other customers, will disable this option
                                 disabled = true;
                             }
 
+                            // paste the options of seating plan into <select> for reservation form
                             $("#movie-seat").append($('<option>', { 
                                 value: item.seat_id,
                                 text : item.line+item.column,
@@ -472,6 +514,7 @@
                             }));
                         });
 
+                        // after the options of seating plan ready, enable this <select>, reservation form is ready for submit now
                         $("#movie-seat").prop('disabled', false);
                     }
                 },
@@ -480,6 +523,7 @@
 
         reserve: function() {
 
+            // ready to submit reserve form
             const formMsg = document.getElementById('form-msg');
             var formAlert = new bootstrap.Toast(formMsg);
 
@@ -499,17 +543,17 @@
                 dataType: 'json',
                 beforeSend: function(responses) {
 
+                    // display spinner before form submit complete
                     common.spinnerLoader(true, reservation._reservationForm);
                 },
                 success: function(responses) {
 
                     if(responses.success)
                     {
-                        reservation._reservationForm.find("#form-msg").find(".toast-body").text(responses.message);
-                        formAlert.show();
-
+                        // ready the data for Node.js 5th page
                         var reservationItem = responses.order.reservation_item.join(", ");
 
+                        // create a hidden form for Node.js 5th page
                         var url = 'http://localhost:8080/success';
                         var form = $('<form action="' + url + '" method="post">' +
                             '<input type="hidden" name="customer_email_address" value="' + responses.order.customer_email_address + '" />' +
@@ -519,7 +563,8 @@
                             '<input type="hidden" name="total_amount" value="' + responses.order.total_amount + '" />' +
                             '<input type="hidden" name="reservation_item" value="' + reservationItem + '" />' +
                             '</form>');
-
+                        
+                        // use POST submit the reservation data to Node.js 5th page
                         $('body').append(form);
                         form.submit();
                     }
@@ -532,6 +577,7 @@
                 },
                 complete: function() {
 
+                    // hide spinner after form submit complete
                     common.spinnerLoader(false, reservation._reservationForm);
                 }
             });
@@ -548,6 +594,7 @@
 
         checkCustomerSession: function() {
 
+            // use ajax to check customer has logined or not
             var data = {
                 action: "session"
             };
@@ -569,6 +616,7 @@
                             member.logout();
                         });
 
+                        // change the hyperlink on nav bar
                         var registerHtml = '<a class="nav-link" href="reservation.html">Reservation</a>';
                         $("#register-nav").html(registerHtml);
 
@@ -578,11 +626,12 @@
 
                         if($("input[name=customer_id]").length > 0) {
 
+                            // insert the customer data into web page
                             $("input[name=customer_id]").val(responses.id);
                             $("input[name=customer_email_address]").val(responses.email_address);
                         }
 
-                        // redirect
+                        // if customer has logined, redirect customer to reservation page if he/she access login page
                         if(location.pathname.indexOf("login.html") != -1)
                         {
                             location.href="reservation.html";
@@ -594,12 +643,13 @@
                         $("#customer-nav").html("");
                         $("#customer-nav").hide();
 
-                        // redirect
+                        // if customer has not logined, redirect customer to login page if he/she access reservation page
                         if(location.pathname.indexOf("reservation.html") != -1)
                         {
                             const formMsg = document.getElementById('logout-msg');
                             var formAlert = new bootstrap.Toast(formMsg);
 
+                            // display toast message to ask customer login first
                             $("#logout-msg").find(".toast-body").text("Please Login First. After 5 second will redirect to Login page.");
                             formAlert.show();
 
@@ -615,6 +665,7 @@
 
         scrollToTop: function() {
 
+            // scroll to top button function
             $(".btn-scroll-to-top").click(function() {
 
                 $("html, body").animate({ scrollTop: 0 }, "slow");
@@ -624,6 +675,7 @@
 
         spinnerLoader: function(showLoader, element) {
 
+            // spinner loader function
             if(showLoader) {
 
                 element.find(".spinner-border").show();

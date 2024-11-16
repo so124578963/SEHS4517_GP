@@ -71,7 +71,7 @@ class Member extends Database
             
             $result["success"] = true;
             $result["customer"] = $customer;
-            $result["message"] = "Login Success: Wait for 5 second to go to Reservation page.";
+            $result["message"] = "Login Success: Wait for 5 seconds to go to Reservation page.";
         }
         else
         {
